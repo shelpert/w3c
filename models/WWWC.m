@@ -29,7 +29,7 @@ classdef WWWC
 ~ Author: Mengsen Zhang <mengsenzhang@gmail.com> 7-2-2019 ~
 %}
 % Please cite: Zhang, M., Sun, Y., & Saggar, M. (2022). Cross-attractor repertoire provides new 
-% perspective on structure-function relationship in the brain. NeuroImage, 119401.
+% perspective on structure-function relationship in the brain. mi, 119401.
 %
     
     properties

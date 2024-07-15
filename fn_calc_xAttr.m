@@ -2,15 +2,21 @@ function [x_attr_matrix, fixpts_int] = fn_calc_xAttr(fixpts_attr, cfg)
 % fn_calc_xAttr: calculate xAttr matrix based on seleted attractor fixpts
 
 nbins = 30;
+% nbins=20;
 
 fighist = figure;
 
 histSe = histogram(fixpts_attr(:,1:cfg.num_parc),nbins);
 
 min_bins = find(islocalmin(histSe.Values));
+% min_bins=1:1:nbins;
 
-regionEdges = [0 histSe.BinEdges(min_bins) histSe.BinEdges(nbins+1)];
-
+% if (histSe.BinLimits(1)<0)
+%     regionEdges = [0 histSe.BinEdges(min_bins) histSe.BinEdges(nbins+1)];
+%     regionEdges(regionEdges<0)=0;
+% else
+    regionEdges = [0 histSe.BinEdges(min_bins) histSe.BinEdges(nbins+1)];
+% end
 close(fighist);
 
 num_states = size(fixpts_attr,1);
@@ -25,6 +31,5 @@ for k_state = 1:num_states
 end
 
 x_attr_matrix = corr(fixpts_int,fixpts_int,'type',cfg.FC_corrType);
-
 
 end

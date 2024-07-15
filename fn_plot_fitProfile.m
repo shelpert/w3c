@@ -29,5 +29,5 @@ function [] = fn_plot_fitProfile(subData)
         
     set(gcf, 'position', [500 90 900 700]);
     
-    suptitle([subData.subID]);
+%    suptitle([subData.subID]);
 end

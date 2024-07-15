@@ -47,7 +47,7 @@ set(gca,'fontsize',20);
 legend('others', 'stable node', 'stable spiral','limit cycle', ...
     'location','best','fontsize',20)
 set(gcf, 'Position',[423 325 1178 713]);
-title(sprintf('w_{EE}=%g, w_{EI}=%g',a.w_EE,a.w_EI),'fontsize',20)
+title(sprintf('w_{EE}=%g, w_{EI}=%g',a.w_EE(1),a.w_EI(1)),'fontsize',20)
 
 
 end

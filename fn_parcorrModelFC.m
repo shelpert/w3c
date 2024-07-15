@@ -1,6 +1,16 @@
 function[rho_all, p_all, rho_intra, p_intra, rho_inter, p_inter] = ...
     fn_parcorrModelFC(FC, modelFC, SC, cfg)
 
+% SC(:,[3:4,12,63:64])=[];
+% SC([3:4,12,63:64],:)=[];
+% FC(:,[3:4,12,63:64])=[];
+% FC([3:4,12,63:64],:)=[];
+% modelFC(:,[3:4,12,63:64])=[];
+% modelFC([3:4,12,63:64],:)=[];
+% cfg.num_parc=61;
+% cfg.LH_parc=1:30;
+% cfg.RH_parc=31:61;
+
 LH_parc = cfg.LH_parc; 
 RH_parc = cfg.RH_parc; 
 corrType = cfg.corrType;

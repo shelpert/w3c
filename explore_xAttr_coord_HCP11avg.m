@@ -3,17 +3,38 @@ clear all;
 clc;
 
 %% Set paths and variables
-w3cpath = fn_w3c_setenvBox();
-scriptDir = w3cpath.scriptDir;
-BoxMainDir = w3cpath.BoxMainDir;
+%w3cpath = fn_w3c_setenvBox();
+%scriptDir = w3cpath.scriptDir;
+%BoxMainDir = w3cpath.BoxMainDiraddpath(genpath('~/''Google Drive/''Shared drives/''BDL-Niharika/codes/BrainSpace-0.1.10/matlab/'))
 
-ProjMainDir = [BoxMainDir,'/YinmingSun/GitHub_data/w3c'];
+ProjMainDir = '/Users/niharika/Library/CloudStorage/GoogleDrive-gajawell@stanford.edu/My Drive/w3c/w3c_data/'; %['/Users/niharika/Documents/Research/w3c/w3c_data/'];
+% ProjMainDir='G:\My Drive\w3c\w3c_data';
+addpath(genpath(ProjMainDir));
+addpath(genpath([ProjMainDir,'../w3c-public']));
+addpath '/Users/niharika/Library/CloudStorage/GoogleDrive-gajawell@stanford.edu/My Drive/w3c/ucla-w3c'; %/Users/niharika/Documents/Research/w3c/ucla-w3c'
+% addpath 'G:\My Drive\w3c\ucla-w3c\'
+
+
+files = dir([ProjMainDir,'/neuromap_erf_myelin_RegD_corrected_0427/run_hlt-het*']);
+files = {files.name};
+
+files_hom = dir([ProjMainDir,'/neuromap_erf_myelin_hom_RegD_corrected_0427/run_hlt-hom*']);
+files_hom = {files_hom.name};
+
+attr_filename=[ProjMainDir, 'neuromap_subModel_HCP100/','X_attr_matrix_myelin_hist30_hombins_corrected_regd_70'];
+new_filename=[ProjMainDir,'neuromap_subModel_HCP100/','ParamFitAll_myelin_hist30_hombins_corrected_regd_70'];
+
+load(attr_filename);
+load(new_filename);
+
+
 
 %% Set processing configuration parameters
 cfg = [];
 
 % DKT atlas
 cfg.num_parc = 66;
+
 cfg.RH_parc = 1:33;
 cfg.LH_parc = 34:66;
 
@@ -48,8 +69,9 @@ roinames_sorted = {Selected_Atlas(w3c_sort).Label}';
 [~, unsort_order] = sort(w3c_sort); %revese sort results for plotting on cortex
 
 %% Load and plot SC
-load('HCP11avg_66.mat');
-SC = connAvg66;
+load('HCP100avg_DWI_infNorm.mat');
+% SC = connAvg66;
+SC=DWI_infNorm;
 
 figure, imagesc(SC);
 xticks(1:cfg.num_parc);
@@ -60,9 +82,11 @@ yticklabels(roinames_sorted);
 set(gcf,'Position',[742 314 1188 998]);
 
 %% Load and plot example rsfMRI parcel connectivity matrix
-subID = '100307';
+subID = '298051';
 FC_filename = [subID, '_DK62parc_conn.mat'];
 FC = fn_load_DK62parc_conn(FC_filename, cfg);
+FC_tril = belowdiag(FC); % Added on Dev 7 2023
+
 
 figure, imagesc(FC);
 
@@ -77,9 +101,25 @@ set(gcf,'Position',[742 314 1188 998]);
 title('RSFC','fontsize',20);
 
 %% Load saved simulation results
-sim_filename = [ProjMainDir, '/RUNS/run_HCP11avg_wEE2wEI1step0_1_2021082381325/', ...
-    'HCP11avg_conn_w3c_wXss.mat'];
+% sim_filename = [ProjMainDir, '/RUNS/run_HCP11avg_wEE2wEI1step0_1_2021082381325/', ...
+%    'HCP11avg_conn_w3c_wXss.mat'];
+%myelin
+%  sim_filename = [ProjMainDir, '/test_66vec/run_HCP11avg_hlt_wEE1_8465wEI0_92324step0_1_2022113310238/', ...
+%      'HCP11avg_hlt_conn_w3c_wXss.mat'];
+% %homogeneous
+%  sim_filename = [ProjMainDir, '/test_66vec/run_HCP11avg_hlt_wEE2wEI1step0_1_2022113310241/', ...
+%      'HCP11avg_hlt_conn_w3c_wXss.mat'];
+% %GABA/NMDA
+%  sim_filename = [ProjMainDir, '/test_66vec/run_HCP11avg_hlt_wEE1_5654wEI0_66761step0_1_2022123360922/', ... 
+%      'HCP11avg_hlt_conn_w3c_wXss.mat'];
 
+sim_filename = [ProjMainDir, '/neuromap_erf_myelin_hom_RegD_corrected_0427/run_hlt-hom_wEE2_3425wEI1_0458G0to5step0_1_20230427/', ... 
+    'HCP100avg_hlt-hom_conn_w3c_wXss.mat'];
+
+load(sim_filename);
+
+
+% %  
 % plot the bifurcation diagram
 fn_plot_bifurcation(sim_filename);
 
@@ -93,7 +133,8 @@ simOutputs = load(sim_filename);
 % 'idx_fixpt_overall': index of fixed points when concatenated across all G
 
 %% Plot xAttr matrix for selected G index
-kG = 23;
+kG = 24;
+% kG=52;
 
 % find attractor indices
 [kG_attrIdx] = fn_select_attrfpts(idx_fixpt, cfg.att_type, kG);
@@ -119,16 +160,65 @@ set(gca,'fontsize',12);
 
 title(['G = ', num2str(simOutputs.Gopts(kG))],'fontsize',20);
 
+%% Taking from calc_wAttr_coord_HCPsub_allG.m
+num_parc = 66;
+
+within_attr_matrix_allG=[];
+FCfit_rho_allG=[];
+FCfit_p_allG=[];
+
+% create cell array before parfor loop
+for kG = 1%1:size(fixpts,1)
+    within_attr_matrix_allG{kG}=[];
+    FCfit_rho_allG{kG}=[];
+    FCfit_p_allG{kG}=[];
+end
+
+%%
+tic
+parfor kG = 24 %1:size(fixpts_attr,1)
+%     tic
+    
+    Nfpts = size(fixpts_attr,1);
+    within_attr_matrix = nan(num_parc,num_parc,Nfpts);
+    FCfit_rho = nan(Nfpts,1);
+    FCfit_p = nan(Nfpts,1);
+    a_copy = a;
+%     a_copy.G=a.Gopts(kG)
+    a_copy.G=ParamMultiFitMaxhom.G(88);
+    
+    for nfp = 1:Nfpts
+%         nfp
+        disp([kG, nfp]);
+        a_copy = a_copy.HeunSolver(fixpts_attr(nfp,:)'); % For the attractors, not all the fixed points
+        
+        within_attr_matrix(:,:,nfp) = corr(zscore(a_copy.X(:,1:a_copy.N)),'type','Spearman');
+        
+        [FCfit_rho(nfp),FCfit_p(nfp)] = corr(belowdiag(within_attr_matrix(:,:,nfp)), ...
+            FC_tril,'type','Spearman','rows','pairwise');
+%         disp([FCfit_rho(nfp),FCfit_p(nfp)])
+    end
+    
+    within_attr_matrix_allG{kG}=within_attr_matrix;
+    FCfit_rho_allG{kG}=FCfit_rho;
+    FCfit_p_allG{kG}=FCfit_p;
+    
+%     toc
+end
+toc
+
+
 %% Simulate rfMRI timeseries for ONE selected G and fixpt
 % see 'calc_wAttr_coord_allG.m' for calculating result for multiple fixpts
 
 w3c_obj = simOutputs.a; % copy object from bifurcation simulation
 
-kG = 23;
+% kG = 23;
+kG=27;
 
 % find attractor indices
 [kG_attrIdx] = fn_select_attrfpts(idx_fixpt, cfg.att_type, kG);
-
+        
 % define attractor fixed points
 fixpts_attr = simOutputs.fixpts{kG}(kG_attrIdx,:);
 
@@ -218,8 +308,8 @@ for kG = 1:size(simOutputs.fixpts,1)
         x_attr_full_wZeros(isnan(x_attr_full)) = 0;
         
         % compute correlation between actual and model FC
-        [rho_all(kG), p_all(kG), rho_intra(kG), p_intra(kG), rho_inter(kG), p_inter(kG)] = ...
-            fn_corrModelFC(FC, x_attr_full_wZeros, cfg);
+%         [rho_all(kG), p_all(kG), rho_intra(kG), p_intra(kG), rho_inter(kG), p_inter(kG)] = ...
+%             fn_corrModelFC(FC, x_attr_full_wZeros, cfg);
         
         % compute partial correlation between actual and model FC while controlling for structural connectivity
         [rho_all_condSC(kG),p_all_condSC(kG),rho_intra_condSC(kG),p_intra_condSC(kG),rho_inter_condSC(kG),p_inter_condSC(kG)] = ...

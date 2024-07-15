@@ -10,6 +10,10 @@ function [attrIdx] = fn_select_attrfpts(idx_fixpt, att_type, Gidx)
 if strcmp(att_type,'all')
     % All attractors: stable nodes, stable spirals, limit cycles
     attrIdx = [idx_fixpt.stSpiral{Gidx}; idx_fixpt.stNode{Gidx}; idx_fixpt.limCycl{Gidx}];
+
+elseif strcmp(att_type, 'stable_node')
+    % All attractors: stable nodes, stable spirals, limit cycles
+    attrIdx = idx_fixpt.stNode{Gidx};
         
 elseif strcmp(att_type,'stSpiral_limCycl')
     % Use only stable spiral and limit cycles
