@@ -19,7 +19,7 @@ clc
 % w3cpath = fn_w3c_setenvBox();
 % scriptDir = w3cpath.scriptDir;
 % BoxMainDir = w3cpath.BoxMainDir;
-ProjMainDir = '/Users/saggar/Dropbox/matlab_code/w3c-main-ys-dec22_2021';%[BoxMainDir,'/YinmingSun/GitHub_data/w3c'];
+ProjMainDir = '~/Dev/w3c/w3c';%[BoxMainDir,'/YinmingSun/GitHub_data/w3c'];
 addpath models/
 addpath utils/
 
@@ -31,19 +31,19 @@ simOutputDir = [ProjMainDir, '/RUNS/'];
 %% Select SC matrix and set configurations
 
 % Group SC
-project_str = 'HCP11avg';
-population_str = 'hlt';
-C_name = 'connAvg66';
-conn_filename = 'HCP11avg_66.mat';
+project_str = 'HCP100avg';
+population_str = 'hcp';
+C_name = 'DWI_infNorm';
+conn_filename = 'HCP100avgCivier_DWI_infNorm.mat';
 
 load([DWIinputDir, conn_filename]);
-eval(['C = ', C_name, ';']);
+C = eval(C_name);
 
 %% Set variable simulation parameters 
 w_EE_select = 2;
 w_EI_select = 1;
-G1 = 1.7; %start G sweep
-G2 = 3; %end G sweep
+G1 = 0.5; %start G sweep
+G2 = 5; %end G sweep
 stepsize = 0.5; %G sweep stepsize
 
 %% create output folder based on variable simulation parameters
