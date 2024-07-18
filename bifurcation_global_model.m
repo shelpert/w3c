@@ -42,8 +42,8 @@ C = eval(C_name);
 %% Set variable simulation parameters 
 w_EE_select = 2;
 w_EI_select = 1;
-G1 = 0.5; %start G sweep
-G2 = 5; %end G sweep
+G1 = 0.7; %start G sweep
+G2 = 4.2; %end G sweep
 stepsize = 0.5; %G sweep stepsize
 
 %% create output folder based on variable simulation parameters
