@@ -34,7 +34,7 @@ simOutputDir = [ProjMainDir, '/RUNS/'];
 project_str = 'HCP100avg';
 population_str = 'hcp';
 C_name = 'DWI_infNorm';
-conn_filename = 'HCP100avgCivier_DWI_infNorm.mat';
+conn_filename = 'HCP100avg_DWI_infNorm.mat';
 
 load([DWIinputDir, conn_filename]);
 C = eval(C_name);
@@ -42,9 +42,9 @@ C = eval(C_name);
 %% Set variable simulation parameters 
 w_EE_select = 2;
 w_EI_select = 1;
-G1 = 0.7; %start G sweep
-G2 = 4.2; %end G sweep
-stepsize = 0.5; %G sweep stepsize
+G1 = 1.7; %start G sweep
+G2 = 3.0; %end G sweep
+stepsize = 0.1; %G sweep stepsize
 
 %% create output folder based on variable simulation parameters
 
