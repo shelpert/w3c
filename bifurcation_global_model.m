@@ -19,12 +19,12 @@ clc
 % w3cpath = fn_w3c_setenvBox();
 % scriptDir = w3cpath.scriptDir;
 % BoxMainDir = w3cpath.BoxMainDir;
-ProjMainDir = '~/Dev/w3c/w3c';%[BoxMainDir,'/YinmingSun/GitHub_data/w3c'];
+%ProjMainDir = '~/Dev/w3c/w3c'; %local
+ProjMainDir = '/scratch/users/shelpert/w3c/output'; %sherlock
 addpath models/
 addpath utils/
 
 DWIinputDir = 'data/';
-% DWIinputDir = [ProjMainDir, '/LA5C_subDWI_DKT/'];
 
 simOutputDir = [ProjMainDir, '/RUNS/'];
 
