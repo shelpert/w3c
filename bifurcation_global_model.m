@@ -23,7 +23,7 @@ end
 addpath models/
 addpath utils/
 
-DWIinputDir = 'data/';
+DWIinputDir = ProjMainDir;
 
 simOutputDir = [ProjMainDir, '/RUNS/'];
 
