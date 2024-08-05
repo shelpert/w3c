@@ -35,7 +35,7 @@ if ~isenv('project_str')
 end
 if ~isenv('population_str')
     population_str = 'hcp';
-endr
+end
 if ~isenv('C_name')
     C_name = 'DWI_infNorm';
 end
