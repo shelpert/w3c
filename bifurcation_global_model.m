@@ -16,11 +16,10 @@ close all
 clc
 
 %% set paths based on configured default paths
-% w3cpath = fn_w3c_setenvBox();
-% scriptDir = w3cpath.scriptDir;
-% BoxMainDir = w3cpath.BoxMainDir;
-%ProjMainDir = '~/Dev/w3c/w3c'; %local
-ProjMainDir = '/scratch/users/shelpert/w3c/output/HCP100indiv'; %sherlock
+%ProjMainDir =  %local
+if ~isenv('ProjMainDir')
+    ProjMainDir = '~/Dev/w3c/w3c'; %local
+end
 addpath models/
 addpath utils/
 
