@@ -20,7 +20,7 @@ clc
 % scriptDir = w3cpath.scriptDir;
 % BoxMainDir = w3cpath.BoxMainDir;
 %ProjMainDir = '~/Dev/w3c/w3c'; %local
-ProjMainDir = '/scratch/users/shelpert/w3c/output'; %sherlock
+ProjMainDir = '/scratch/users/shelpert/w3c/output/HCP100indiv'; %sherlock
 addpath models/
 addpath utils/
 
@@ -31,10 +31,19 @@ simOutputDir = [ProjMainDir, '/RUNS/'];
 %% Select SC matrix and set configurations
 
 % Group SC
-project_str = 'HCP100avg';
-population_str = 'hcp';
-C_name = 'DWI_infNorm';
-conn_filename = 'HCP100avg_DWI_infNorm.mat';
+if ~isenv('project_str')
+    project_str = 'HCP100indiv';
+end
+if ~isenv('population_str')
+    population_str = 'hcp';
+endr
+if ~isenv('C_name')
+    C_name = 'DWI_infNorm';
+end
+if ~isenv('conn_filename')
+    conn_filename = 'HCP100_DWI_infNorm.mat';
+end
+
 
 load([DWIinputDir, conn_filename]);
 C = eval(C_name);
