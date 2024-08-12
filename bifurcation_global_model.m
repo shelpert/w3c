@@ -11,13 +11,13 @@
 % perspective on structure-function relationship in the brain. NeuroImage, 119401.
 
 %%
-clear 
-close all
-clc
+%clear 
+%close all
+%clc
 
 %% set paths based on configured default paths
 %ProjMainDir =  %local
-if ~isenv('ProjMainDir')
+if ~exist('ProjMainDir', 'var')
     ProjMainDir = '~/Dev/w3c/w3c'; %local
 end
 addpath models/
@@ -29,17 +29,16 @@ simOutputDir = [ProjMainDir, '/RUNS/'];
 
 %% Select SC matrix and set configurations
 
-% Group SC
-if ~isenv('project_str')
+if ~exist('project_str', 'var')
     project_str = 'HCP100indiv';
 end
-if ~isenv('population_str')
+if ~exist('population_str', 'var')
     population_str = 'hcp';
 end
-if ~isenv('C_name')
+if ~exist('C_name', 'var')
     C_name = 'DWI_infNorm';
 end
-if ~isenv('conn_filename')
+if ~exist('conn_filename', 'var')
     conn_filename = 'HCP100_DWI_infNorm.mat';
 end
 

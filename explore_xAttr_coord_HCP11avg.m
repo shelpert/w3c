@@ -7,27 +7,12 @@ clc;
 %scriptDir = w3cpath.scriptDir;
 %BoxMainDir = w3cpath.BoxMainDiraddpath(genpath('~/''Google Drive/''Shared drives/''BDL-Niharika/codes/BrainSpace-0.1.10/matlab/'))
 
-ProjMainDir = '/Users/niharika/Library/CloudStorage/GoogleDrive-gajawell@stanford.edu/My Drive/w3c/w3c_data/'; %['/Users/niharika/Documents/Research/w3c/w3c_data/'];
-% ProjMainDir='G:\My Drive\w3c\w3c_data';
+ProjMainDir = '~/Dev/w3c/w3c';
 addpath(genpath(ProjMainDir));
-addpath(genpath([ProjMainDir,'../w3c-public']));
-addpath '/Users/niharika/Library/CloudStorage/GoogleDrive-gajawell@stanford.edu/My Drive/w3c/ucla-w3c'; %/Users/niharika/Documents/Research/w3c/ucla-w3c'
-% addpath 'G:\My Drive\w3c\ucla-w3c\'
+addpath(genpath('~/Dev/w3c/w3c_data'));
 
-
-files = dir([ProjMainDir,'/neuromap_erf_myelin_RegD_corrected_0427/run_hlt-het*']);
+files = dir([ProjMainDir,'/RUNS/run_HCP100avg_hcp_wEE2wEI1step0_1_2024072111912*']);
 files = {files.name};
-
-files_hom = dir([ProjMainDir,'/neuromap_erf_myelin_hom_RegD_corrected_0427/run_hlt-hom*']);
-files_hom = {files_hom.name};
-
-attr_filename=[ProjMainDir, 'neuromap_subModel_HCP100/','X_attr_matrix_myelin_hist30_hombins_corrected_regd_70'];
-new_filename=[ProjMainDir,'neuromap_subModel_HCP100/','ParamFitAll_myelin_hist30_hombins_corrected_regd_70'];
-
-load(attr_filename);
-load(new_filename);
-
-
 
 %% Set processing configuration parameters
 cfg = [];
@@ -43,8 +28,8 @@ cfg.FC_corrType = 'Spearman'; %correlation to generate model FC
 cfg.corrType = 'Spearman'; %correlation between model and real FC
 
 %% add path for GIFTI toolbox
-% can be downloaded locally from: https://www.artefact.tk/software/matlab/gifti/
-addpath([ProjMainDir, '/Matlab/gifti-master']);
+% can be downloaded locally from: https://www.gllmflndn.com/software/matlab/gifti/
+addpath('~/Dev/gifti-main');
 
 %% Plot selected configurations on brain map
 load('fsaverage_mesh_wAtlases.mat', 'cortex_327684V_wSchaeferAtlas');
@@ -82,7 +67,7 @@ yticklabels(roinames_sorted);
 set(gcf,'Position',[742 314 1188 998]);
 
 %% Load and plot example rsfMRI parcel connectivity matrix
-subID = '298051';
+subID = '100307';
 FC_filename = [subID, '_DK62parc_conn.mat'];
 FC = fn_load_DK62parc_conn(FC_filename, cfg);
 FC_tril = belowdiag(FC); % Added on Dev 7 2023
@@ -113,8 +98,9 @@ title('RSFC','fontsize',20);
 %  sim_filename = [ProjMainDir, '/test_66vec/run_HCP11avg_hlt_wEE1_5654wEI0_66761step0_1_2022123360922/', ... 
 %      'HCP11avg_hlt_conn_w3c_wXss.mat'];
 
-sim_filename = [ProjMainDir, '/neuromap_erf_myelin_hom_RegD_corrected_0427/run_hlt-hom_wEE2_3425wEI1_0458G0to5step0_1_20230427/', ... 
-    'HCP100avg_hlt-hom_conn_w3c_wXss.mat'];
+sim_filename = [ProjMainDir, '/RUNS/run_HCP100avg_hcp_wEE2wEI1step0_1_2024072111912/', ... 
+    'HCP100avg_hcp_conn_w3c_wXss.mat'];
+
 
 load(sim_filename);
 
@@ -133,7 +119,7 @@ simOutputs = load(sim_filename);
 % 'idx_fixpt_overall': index of fixed points when concatenated across all G
 
 %% Plot xAttr matrix for selected G index
-kG = 24;
+kG = 5;
 % kG=52;
 
 % find attractor indices
@@ -176,7 +162,7 @@ end
 
 %%
 tic
-parfor kG = 24 %1:size(fixpts_attr,1)
+parfor kG = 5 %1:size(fixpts_attr,1)
 %     tic
     
     Nfpts = size(fixpts_attr,1);
@@ -184,8 +170,8 @@ parfor kG = 24 %1:size(fixpts_attr,1)
     FCfit_rho = nan(Nfpts,1);
     FCfit_p = nan(Nfpts,1);
     a_copy = a;
-%     a_copy.G=a.Gopts(kG)
-    a_copy.G=ParamMultiFitMaxhom.G(88);
+    a_copy.G=a.Gopts(kG)
+    %a_copy.G=ParamMultiFitMaxhom.G(88);
     
     for nfp = 1:Nfpts
 %         nfp
@@ -214,7 +200,7 @@ toc
 w3c_obj = simOutputs.a; % copy object from bifurcation simulation
 
 % kG = 23;
-kG=27;
+%kG=27;
 
 % find attractor indices
 [kG_attrIdx] = fn_select_attrfpts(idx_fixpt, cfg.att_type, kG);
